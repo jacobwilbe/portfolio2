@@ -1,12 +1,16 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 
-const inter = Inter({ subsets: ['latin'] });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'Jacob Wilber Portfolio',
-  description: 'Portfolio',
+  title: 'Jacob Wilber',
+  description: 'Software Engineer based in San Francisco',
 };
 
 export default function RootLayout({
@@ -16,7 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={jetbrainsMono.className}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

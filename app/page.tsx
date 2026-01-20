@@ -1,263 +1,329 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ExternalLink, ChevronDown, Brain, School, Code, Briefcase } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProjectCard } from "@/components/ProjectCard";
-
+import { useState, useRef } from "react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState("about");
+  const [activeTab, setActiveTab] = useState<"experience" | "projects" | "skills" | "education" | null>("experience");
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setActiveSection(sectionId);
+  const handleTabClick = (tab: "experience" | "projects" | "skills" | "education") => {
+    if (activeTab === tab) {
+      setActiveTab(null);
+    } else {
+      setActiveTab(tab);
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 50);
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background via-purple-500/5 to-primary/5">
-      {/* Hero Section */}
-      <section className="h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center z-10"
-        >
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
-            Jacob Wilber
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            AI/Machine Learning Researcher | Software Engineer
-          </p>
-          <div className="flex gap-4 justify-center mb-12">
-            <Button onClick={() => window.open("https://github.com/jacobwilbe", "_blank")} variant="outline" size="icon" className="rounded-full hover:scale-110 transition-transform">
-              <Github className="h-5 w-5" />
-            </Button>
-            <Button onClick={() => window.open("https://www.linkedin.com/in/jacobwilber/", "_blank")} variant="outline" size="icon" className="rounded-full hover:scale-110 transition-transform">
-              <Linkedin className="h-5 w-5" />
-            </Button>
-            <Button onClick={() => window.open("mailto:jacobwilber4@gmail.com", "_blank")} variant="outline" size="icon" className="rounded-full hover:scale-110 transition-transform">
-              <Mail className="h-5 w-5" />
-            </Button>
-          </div>
-          <Button
-            variant="secondary"
-            onClick={() => scrollToSection("about")}
-            className="animate-bounce rounded-full"
-          >
-            <ChevronDown className="h-5 w-5 mr-2" />
-            Explore
-          </Button>
-        </motion.div>
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
-        {/* About Section */}
-        <section id="about" className="mb-20">
-          <h2 className="text-3xl font-bold mb-8 flex items-center bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-            <Brain className="mr-2 text-primary" /> About Me
-          </h2>
-          <Card className="p-6 border-2 border-primary/10 hover:border-primary/20 transition-all">
-            <p className="text-lg leading-relaxed">
-              I&apos;m a Computer Science student at the University of Delaware with a deep passion for Machine Learning and AI. 
-              Currently conducting research on Diffusion Models, specifically working with RFDiffusion for protein structure generation. 
-              With hands-on experience in both ML systems and backend development, 
-              I&apos;m seeking Backend Engineer and Machine Learning Engineering internship opportunities where I can apply my 
-              experience in building AI driven applications and gain more experience with the latest ML technologies.
+    <>
+      <div className="grid-background" aria-hidden="true" />
+      <div className="mountains" aria-hidden="true" />
+      <main className="min-h-screen bg-transparent main-content">
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          {/* Hero Section */}
+          <section className="mb-20">
+            <div className="flex items-center gap-2 text-muted-foreground mb-4">
+              <MapPin className="h-4 w-4" />
+              <span>Loading ...</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Jacob Wilber<span className="text-primary">.</span>
+            </h1>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl">
+              Interested in building agentic workflows, LLM applications, and robotics/embedded systems.
+              Previous: AI engineering @BlueArc in Redwood City. CS + EE at University of Delaware.
             </p>
-          </Card>
-        </section>
-
-        {/* Experience & Projects */}
-        <Tabs defaultValue="experience" className="mb-20">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="experience">
-              <Briefcase className="mr-2" /> Experience
-            </TabsTrigger>
-            <TabsTrigger value="projects">
-              <Code className="mr-2" /> Projects
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="experience">
-            <div className="grid gap-6">
-              <ExperienceCard
-                title="Software Engineering Fellow"
-                company="HeadStarter AI"
-                period="July 2024 – Present"
-                points={[
-                  "Built 5+ AI apps using NextJS, OpenAI, Pinecone, StripeAPI",
-                  "Developed projects from design to deployment leading 2+ engineering fellows",
-                  "Coached by Amazon and Google engineers along with YC Start up founders"
-                ]}
-              />
-              <ExperienceCard
-                title="Undergraduate Teaching Assistant"
-                company="University of Delaware"
-                period="Aug. 2024 – Present"
-                points={[
-                  "Facilitate weekly lab sessions for Python programming",
-                  "Hold regular office hours for one-on-one support",
-                  "Assist in grading and developing course materials"
-                ]}
-              />
-              <ExperienceCard
-                title="Undergraduate Researcher"
-                company="University of Delaware"
-                period="September 2024 – Present"
-                points={[
-                  "Research on deep learning prediction networks",
-                  "Analyzing RFDiffusion for protein structure generation",
-                  "Testing on GPU clusters for computational evaluation"
-                ]}
-              />
+            <div className="flex gap-3">
+              <Link
+                href="https://github.com/jacobwilbe"
+                target="_blank"
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90 transition-opacity"
+              >
+                <Github className="h-4 w-4" />
+                GitHub
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/jacobwilber/"
+                target="_blank"
+                className="flex items-center gap-2 px-4 py-2 border border-border rounded hover:bg-secondary transition-colors"
+              >
+                <Linkedin className="h-4 w-4" />
+                LinkedIn
+              </Link>
+              <Link
+                href="mailto:jacobwilber4@gmail.com"
+                className="flex items-center gap-2 px-4 py-2 border border-border rounded hover:bg-secondary transition-colors"
+              >
+                <Mail className="h-4 w-4" />
+                Email
+              </Link>
             </div>
-          </TabsContent>
+          </section>
 
-          <TabsContent value="projects">
-            <div className="grid gap-6">
-              <ProjectCard
-                title="Generative Flashcard SaaS"
-                tech="NextJS, ReactJS, Clerk, Stripe, OpenAI, Firebase"
-                description="AI-powered SaaS product generating flashcards from text and PDF"
-                points={[
-                  "Integrated Clerk authentication and Firebase storage",
-                  "Implemented Stripe-based pricing tiers",
-                  "Feature-rich flashcard generation system"
-                ]}
-                videoUrl="/demo2.mp4"
-                githubUrl="https://github.com/jacobwilbe/flashcard-saas"
-              />
-              <ProjectCard
-                title="RateMyProfessor RAG Chatbot"
-                tech="NextJS, ReactJS, PineconeDB, OpenAI, Python"
-                description="Intelligent chatbot for UD Computer Science faculty information"
-                points={[
-                  "Implemented vector database with Pinecone",
-                  "Integrated OpenAI for context-aware responses",
-                  "Used RAG for enhanced accuracy"
-                ]}
-                videoUrl="/demo3.mp4"
-                githubUrl="https://github.com/jacobwilbe/rmp-rag-agent"
-              />
-              <ProjectCard
-                title="Pantry.AI"
-                tech="NextJS, ReactJS, OpenAI, Firebase"
-                description="Smart inventory management system"
-                points={[
-                  "Integrated GPT Vision API for item classification",
-                  "Implemented Firebase authentication",
-                  "Real-time inventory tracking"
-                ]}
-                videoUrl="/demo1.mp4"
-                githubUrl="https://github.com/jacobwilbe/inventory-management-app"
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Education */}
-        <section id="education" className="mb-20">
-          <h2 className="text-3xl font-bold mb-8 flex items-center bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-            <School className="mr-2 text-primary" /> Education
-          </h2>
-          <Card className="p-6 border-2 border-primary/10 hover:border-primary/20 transition-all">
-            <h3 className="text-xl font-bold mb-2">University of Delaware</h3>
-            <p className="text-muted-foreground mb-4">
-              Bachelor of Science in Computer Science, AI and Robotics
-            </p>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <p className="font-medium">GPA</p>
-                <p className="text-muted-foreground">3.8/4.0</p>
-              </div>
-              <div>
-                <p className="font-medium">Expected Graduation</p>
-                <p className="text-muted-foreground">May 2026</p>
-              </div>
-            </div>
-            <div className="mb-4">
-              <p className="font-medium">Achievements</p>
-              <p className="text-muted-foreground">Dean&apos;s List: Fall 2022 - Spring 2024</p>
-            </div>
-            <div>
-              <p className="font-medium">Key Coursework</p>
-              <p className="text-muted-foreground">
-                Data Structures, Algorithms, Machine Learning, Parallel Computing,
-                Software Engineering, Systems Programming
+          {/* Currently / Looking For */}
+          <section className="mb-20 grid md:grid-cols-2 gap-6">
+            <div className="p-6 bg-card border border-border rounded-lg">
+              <h2 className="text-sm text-primary font-medium mb-2">CURRENTLY</h2>
+              <p className="text-foreground">
+                Final year at University of Delaware, building an autonomous multi-floor delivery robot with ROS2 and LiDAR SLAM.
               </p>
             </div>
-          </Card>
-        </section>
+            <div className="p-6 bg-card border border-border rounded-lg">
+              <h2 className="text-sm text-primary font-medium mb-2">LOOKING FOR</h2>
+              <p className="text-foreground">
+                Full-time software engineering roles starting May 2026. Interested in backend, AI engineering, or ML infrastructure.
+              </p>
+            </div>
+          </section>
 
-        {/* Skills */}
-        <section id="skills">
-          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-            Technical Skills
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <SkillCard
-              title="Languages"
-              skills={["Java", "Python", "C/C++", "TypeScript", "JavaScript", "HTML/CSS", "R", "Lua"]}
-            />
-            <SkillCard
-              title="Frameworks & Tools"
-              skills={["NextJS", "Node.js", "React", "AWS", "GCP", "Firebase", "Git", "Vercel", "Jupyter Notebook", "PineconeDB", "OpenAI", "Clerk", "Numpy", "Pandas", "PyTorch", "Scikit-learn"]}
-            />
+          {/* Tab Buttons */}
+          <section className="mb-12">
+            <div className="flex justify-center gap-8 md:gap-12">
+              <button
+                type="button"
+                onClick={() => handleTabClick("experience")}
+                className={`px-2 py-1 text-lg font-medium bg-transparent cursor-pointer transition-all ${
+                  activeTab === "experience"
+                    ? "border-b-2 border-primary"
+                    : "border-b-2 border-transparent hover:text-muted-foreground"
+                }`}
+              >
+                Experience
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTabClick("projects")}
+                className={`px-2 py-1 text-lg font-medium bg-transparent cursor-pointer transition-all ${
+                  activeTab === "projects"
+                    ? "border-b-2 border-primary"
+                    : "border-b-2 border-transparent hover:text-muted-foreground"
+                }`}
+              >
+                Projects
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTabClick("skills")}
+                className={`px-2 py-1 text-lg font-medium bg-transparent cursor-pointer transition-all ${
+                  activeTab === "skills"
+                    ? "border-b-2 border-primary"
+                    : "border-b-2 border-transparent hover:text-muted-foreground"
+                }`}
+              >
+                Skills
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTabClick("education")}
+                className={`px-2 py-1 text-lg font-medium bg-transparent cursor-pointer transition-all ${
+                  activeTab === "education"
+                    ? "border-b-2 border-primary"
+                    : "border-b-2 border-transparent hover:text-muted-foreground"
+                }`}
+              >
+                Education
+              </button>
+            </div>
+          </section>
+
+          {/* Tab Content */}
+          <div ref={contentRef}>
+
+          {/* Experience Content */}
+          {activeTab === "experience" && (
+            <section className="mb-20">
+              <div className="space-y-8">
+                <ExperienceItem
+                  title="Software Engineer Intern, AI & Graph"
+                  company="BlueArc"
+                  location="Redwood City, CA"
+                  period="June 2025 - August 2025"
+                  points={[
+                    "Built LLM-driven scraping workflows using Python, ScrapingBee, and GCP, ingesting 10k+ webpages",
+                    "Processed multi-million row datasets using BigQuery, wrote structured data into PostgreSQL knowledge-graph tables",
+                    "Improved extraction accuracy by 22% through unit tests and parallel batch E2E testing",
+                    "Implemented custom Python permissions decorator and role-based access controls"
+                  ]}
+                />
+                <ExperienceItem
+                  title="Software Engineering Fellow"
+                  company="HeadStarter AI"
+                  location="Newark, DE"
+                  period="July 2024 - September 2024"
+                  points={[
+                    "Engineered 5+ AI apps in 5 weeks using NextJS, OpenAI, Pinecone, and Stripe, launched product with 1000 users",
+                    "Led projects from design to deployment while mentoring 3+ fellows in Agile/Scrum environment",
+                    "Mentored by engineers from Amazon, Google, and YC founders"
+                  ]}
+                />
+                <ExperienceItem
+                  title="Undergraduate Research Assistant"
+                  company="University of Delaware"
+                  location="Newark, DE"
+                  period="September 2024 - December 2024"
+                  points={[
+                    "Studied large-scale generative modeling including diffusion models (RFdiffusion) and vision architectures (AlexNet, ResNet)",
+                    "Developed medical RAG application using real EHR data for clinical history retrieval and summarization"
+                  ]}
+                />
+                <ExperienceItem
+                  title="Undergraduate Teaching Assistant"
+                  company="University of Delaware"
+                  location="Newark, DE"
+                  period="August 2024 - December 2024"
+                  points={[
+                    "Teaching assistant for CISC 106, Introductory to Programming with Python",
+                    "Facilitated weekly lab sessions, guiding students through hands-on Python programming exercises",
+                    "Held regular office hours to provide one-on-one support and clarify programming concepts",
+                    "Assisted in grading assignments and exams, offering detailed feedback to enhance students' coding skills"
+                  ]}
+                />
+                <ExperienceItem
+                  title="CNC Machine Operator"
+                  company="Ancient Art Stone"
+                  location="Milford, DE"
+                  period="June 2019 - August 2023"
+                  points={[
+                    "Operated and programmed a Prussiani 5-axis saw using WCam2K and AutoCAD",
+                    "Managed saws feed and spin rate to achieve 4% decrease in runtime",
+                    "Oversaw fabrication of over $20,000 worth of granite countertops daily",
+                    "Mentored and trained an employee to operate the Prussiani CNC"
+                  ]}
+                />
+              </div>
+            </section>
+          )}
+
+          {/* Projects Content */}
+          {activeTab === "projects" && (
+            <section className="mb-20">
+              <div className="grid gap-4">
+                <ProjectItem
+                  title="Autonomous Multi-Floor Delivery Robot"
+                  tech="ROS2, Python, Gazebo, Nav2, Docker"
+                  description="DoorDash-style delivery robot for multi-floor buildings with LiDAR-based SLAM, Nav2 navigation stack, and behavior trees for autonomous pickup/dropoff."
+                />
+                <ProjectItem
+                  title="Arxchive"
+                  tech="Python, Snowflake, Mistral, Streamlit, Langchain"
+                  description="Cloud RAG application for conversing with arXiv research papers. Uses Snowflake Cortex for similarity search and Mistral LLM for natural language processing."
+                />
+                <ProjectItem
+                  title="Feast Finder"
+                  tech="TypeScript, React, Firebase, Gemini, Jotai"
+                  description="Scan grocery items using Gemini Vision API to detect ingredients and generate recipe suggestions. Integrated Google Maps Places API for restaurant recommendations."
+                />
+                <ProjectItem
+                  title="RateMyProfessor RAG Chatbot"
+                  tech="NextJS, PineconeDB, OpenAI, Python"
+                  description="Chatbot for UD CS faculty using web scraping and RAG. Vector database with Pinecone for efficient professor information retrieval."
+                />
+                <ProjectItem
+                  title="Flashcard SaaS"
+                  tech="NextJS, Clerk, Stripe, OpenAI, Firebase"
+                  description="AI-powered flashcard generation from text and PDF. Integrated Clerk auth, Firebase storage, and Stripe-based pricing tiers."
+                />
+              </div>
+            </section>
+          )}
+
+          {/* Skills Content */}
+          {activeTab === "skills" && (
+            <section className="mb-20">
+              <div className="space-y-4">
+                <SkillRow label="Languages" skills="Python, TypeScript, JavaScript, Java, C/C++, SQL" />
+                <SkillRow label="Tools" skills="AWS, GCP, Docker, BigQuery, PostgreSQL, Firebase, Pinecone, Git" />
+                <SkillRow label="Libraries" skills="React, Next.js, PyTorch, pandas, NumPy, ROS2, OpenAI, CUDA" />
+              </div>
+            </section>
+          )}
+
+          {/* Education Content */}
+          {activeTab === "education" && (
+            <section className="mb-20">
+              <div className="p-6 bg-card border border-border rounded-lg">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                  <h3 className="font-bold">University of Delaware</h3>
+                  <span className="text-muted-foreground text-sm">Aug 2022 - May 2026</span>
+                </div>
+                <p className="text-muted-foreground mb-2">
+                  B.S. Computer Science, Minor in Electrical Engineering
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  GPA: 3.8/4.0 · Dean&apos;s List Fall 2022 - Spring 2025
+                </p>
+              </div>
+            </section>
+          )}
           </div>
-        </section>
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   );
 }
 
-function ExperienceCard({ title, company, period, points }: {
+function ExperienceItem({
+  title,
+  company,
+  location,
+  period,
+  points,
+}: {
   title: string;
   company: string;
+  location: string;
   period: string;
   points: string[];
 }) {
   return (
-    <Card className="p-6 border-2 border-primary/10 hover:border-primary/20 transition-all">
-      <h3 className="text-xl font-bold mb-1 bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">{title}</h3>
-      <p className="text-muted-foreground mb-2">{company}</p>
-      <p className="text-sm text-muted-foreground mb-4">{period}</p>
-      <ul className="list-disc list-inside space-y-2">
+    <div className="border-l-2 border-border pl-6 hover:border-primary transition-colors">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-1">
+        <h3 className="font-bold">{title}</h3>
+        <span className="text-muted-foreground text-sm">{period}</span>
+      </div>
+      <p className="text-primary mb-3">
+        {company} · {location}
+      </p>
+      <ul className="space-y-1">
         {points.map((point, index) => (
-          <li key={index} className="text-muted-foreground">{point}</li>
+          <li key={index} className="text-muted-foreground text-sm flex gap-2">
+            <span className="text-primary">-</span>
+            {point}
+          </li>
         ))}
       </ul>
-    </Card>
+    </div>
   );
 }
 
-function SkillCard({ title, skills }: { title: string; skills: string[] }) {
+function ProjectItem({
+  title,
+  tech,
+  description,
+}: {
+  title: string;
+  tech: string;
+  description: string;
+}) {
   return (
-    <Card className="p-6 border-2 border-primary/10 hover:border-primary/20 transition-all">
-      <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">{title}</h3>
-      <div className="flex flex-wrap gap-2">
-        {skills.map((skill, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 bg-primary/10 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
-    </Card>
+    <div className="p-6 bg-card border border-border rounded-lg">
+      <h3 className="font-bold mb-2">{title}</h3>
+      <p className="text-sm text-primary mb-2">{tech}</p>
+      <p className="text-muted-foreground text-sm">{description}</p>
+    </div>
+  );
+}
+
+function SkillRow({ label, skills }: { label: string; skills: string }) {
+  return (
+    <div className="flex flex-col md:flex-row md:gap-4">
+      <span className="text-primary font-medium w-24 shrink-0">{label}</span>
+      <span className="text-muted-foreground">{skills}</span>
+    </div>
   );
 }
