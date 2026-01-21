@@ -69,17 +69,18 @@
 
 .mountains {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
-  height: 50vh;
+  height: 100vh;
   pointer-events: none;
   z-index: -2;
-  opacity: 0.12;
-  background-image: url('/mountain-silhouette.svg');
+  opacity: 0.14;
+  background-image: url('/mountain-bg.png');
   background-size: cover;
-  background-position: bottom center;
+  background-position: center top;
   background-repeat: no-repeat;
+  filter: grayscale(20%) saturate(0.8);
 }
 
 .main-content {
