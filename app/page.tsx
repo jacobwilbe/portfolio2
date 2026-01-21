@@ -76,7 +76,7 @@ export default function Home() {
             <div className="p-6 bg-card border border-border rounded-lg">
               <h2 className="text-sm text-primary font-medium mb-2">LOOKING FOR</h2>
               <p className="text-foreground">
-                Full-time software engineering roles starting May 2026. Interested in backend, AI engineering, or ML infrastructure.
+                Full-time software engineering roles starting June 2026. Also open to internship roles opening in spring or summer. Interested in backend, AI engineering, or ML infrastructure.
               </p>
             </div>
           </section>
